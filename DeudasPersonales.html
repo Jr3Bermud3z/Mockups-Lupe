@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Deudas Personales - Lupe Laguna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #f9fafb; --color-card: #ffffff; --color-text-primary: #111827;
+            --color-text-secondary: #4b5563; --color-text-muted: #9ca3af; --color-border: #e5e7eb;
+            --color-primary: #3b82f6; --color-accent: #8b5cf6; --color-success: #10b981;
+            --color-warning: #f59e0b; --color-danger: #ef4444;
+            --space-sm: 0.75rem; --space-md: 1rem; --space-lg: 1.5rem; --space-xl: 2rem;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text-primary); display: flex; min-height: 100vh; }
+        
+        /* Layout común */
+        .sidebar { width: 240px; background: white; border-right: 1px solid var(--color-border); position: fixed; top: 0; bottom: 0; }
+        .header { height: 64px; background: white; border-bottom: 1px solid var(--color-border); padding: 0 var(--space-xl); display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; right: 0; left: 240px; }
+        .main-content { flex: 1; margin-left: 240px; margin-top: 64px; padding: var(--space-xl); }
+        
+        /* Contenido específico */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xl); }
+        .page-header h1 { font-size: 1.75rem; font-weight: 600; }
+        
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); margin-bottom: var(--space-xl); }
+        .stat-card { background: white; border: 1px solid var(--color-border); border-radius: 10px; padding: var(--space-lg); text-align: center; }
+        .stat-number { font-size: 1.75rem; font-weight: 700; }
+        .stat-label { font-size: 0.9rem; color: var(--color-text-muted); }
+        
+        .filters-bar { background: white; border: 1px solid var(--color-border); border-radius: 12px; padding: var(--space-lg); margin-bottom: var(--space-xl); display: flex; gap: var(--space-lg); }
+        .filter-group { display: flex; align-items: center; gap: var(--space-sm); }
+        .filter-select { padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: 8px; background: white; }
+        
+        .debt-table { width: 100%; background: white; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+        .table-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: var(--space-lg); background: #f9fafb; border-bottom: 1px solid var(--color-border); font-weight: 600; color: var(--color-text-secondary); }
+        .table-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: var(--space-lg); border-bottom: 1px solid var(--color-border); align-items: center; }
+        .table-row:last-child { border-bottom: none; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .status-pending { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+        .status-overdue { background: rgba(239, 68, 68, 0.1); color: var(--color-danger); }
+        .status-paid { background: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+        
+        .action-btn { padding: 6px 12px; background: var(--color-primary); color: white; border: none; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
+        .action-btn:hover { background: #2563eb; }
+        
+        .btn-primary { padding: var(--space-sm) var(--space-lg); background: var(--color-primary); color: white; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR (igual que otras páginas) -->
+    <nav class="sidebar">
+        <div style="padding: var(--space-xl) var(--space-lg); border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: var(--space-md);">
+            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">LL</div>
+            <div style="font-size: 1.25rem; font-weight: 600;">Lupe Laguna</div>
+        </div>
+        <div style="padding: var(--space-lg) 0;">
+            <a href="dashboard.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-home"></i> Home</a>
+            <a href="solares.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-map-marked-alt"></i> Solares</a>
+            <a href="vehiculos.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-car"></i> Vehículos</a>
+            <a href="deudas.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-primary); background: #eff6ff; border-left: 3px solid var(--color-primary); text-decoration: none;"><i class="fas fa-hand-holding-usd"></i> Deudas Personales</a>
+            <a href="clientes.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-users"></i> Clientes</a>
+            <a href="pagos.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-money-bill-wave"></i> Pagos</a>
+            <a href="recibos.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-file-invoice-dollar"></i> Recibos</a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div style="display: flex; align-items: center; gap: var(--space-xl); flex: 1;">
+            <div><h1 style="font-size: 1.25rem; font-weight: 600;">Deudas Personales</h1></div>
+            <div style="flex: 1; max-width: 400px; position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted);"></i>
+                <input type="text" placeholder="Buscar deuda por persona..." style="width: 100%; padding: var(--space-sm) var(--space-md); padding-left: 40px; border: 1px solid var(--color-border); border-radius: 8px; background: #f9fafb;">
+            </div>
+        </div>
+        <button class="btn-primary"><i class="fas fa-plus"></i> Nueva Deuda</button>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1>Deudas Personales</h1>
+                <p style="color: var(--color-text-muted); margin-top: 4px;">Registro y seguimiento de préstamos personales</p>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card"><div class="stat-number">$800</div><div class="stat-label">Total por Cobrar</div></div>
+            <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">Deudas Activas</div></div>
+            <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">Vencidas</div></div>
+            <div class="stat-card"><div class="stat-number">$2,400</div><div class="stat-label">Cobrado 2024</div></div>
+        </div>
+
+        <div class="filters-bar">
+            <div class="filter-group">
+                <span style="color: var(--color-text-secondary); font-weight: 500;">Estado:</span>
+                <select class="filter-select">
+                    <option>Todas</option>
+                    <option>Pendiente</option>
+                    <option>Vencida</option>
+                    <option>Pagada</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span style="color: var(--color-text-secondary); font-weight: 500;">Ordenar por:</span>
+                <select class="filter-select">
+                    <option>Fecha de vencimiento</option>
+                    <option>Monto (Mayor a menor)</option>
+                    <option>Persona (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="debt-table">
+            <div class="table-header">
+                <div>Persona</div>
+                <div>Monto Total</div>
+                <div>Pagado</div>
+                <div>Vencimiento</div>
+                <div>Acciones</div>
+            </div>
+            
+            <div class="table-row">
+                <div>
+                    <div style="font-weight: 500;">Carlos Ruiz</div>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted);">Préstamo personal</div>
+                </div>
+                <div style="font-weight: 600;">$400</div>
+                <div>$0</div>
+                <div>
+                    <span class="status-badge status-overdue">Vencido</span>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 4px;">20 May 2024</div>
+                </div>
+                <div><button class="action-btn">Registrar Pago</button></div>
+            </div>
+            
+            <div class="table-row">
+                <div>
+                    <div style="font-weight: 500;">Ana Martínez</div>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted);">Ayuda familiar</div>
+                </div>
+                <div style="font-weight: 600;">$300</div>
+                <div>$100</div>
+                <div>
+                    <span class="status-badge status-pending">Pendiente</span>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 4px;">25 May 2024</div>
+                </div>
+                <div><button class="action-btn">Registrar Pago</button></div>
+            </div>
+            
+            <div class="table-row">
+                <div>
+                    <div style="font-weight: 500;">Luis González</div>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted);">Préstamo negocios</div>
+                </div>
+                <div style="font-weight: 600;">$1,000</div>
+                <div>$600</div>
+                <div>
+                    <span class="status-badge status-pending">Pendiente</span>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 4px;">15 Jun 2024</div>
+                </div>
+                <div><button class="action-btn">Registrar Pago</button></div>
+            </div>
+            
+            <div class="table-row">
+                <div>
+                    <div style="font-weight: 500;">María Rodríguez</div>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted);">Préstamo pagado</div>
+                </div>
+                <div style="font-weight: 600;">$500</div>
+                <div>$500</div>
+                <div>
+                    <span class="status-badge status-paid">Pagado</span>
+                    <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 4px;">10 Abr 2024</div>
+                </div>
+                <div><button class="action-btn" style="background: var(--color-text-muted);">Ver Historial</button></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const persona = this.closest('.table-row').querySelector('div:first-child div:first-child').textContent;
+                if(this.textContent === 'Registrar Pago') {
+                    alert(`Registrar pago para: ${persona}\n\nFormulario para registrar monto, fecha y forma de pago.`);
+                }
+            });
+        });
+        
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            alert('Nueva deuda personal:\n\nFormulario para registrar:\n- Persona\n- Motivo\n- Monto total\n- Fecha de préstamo\n- Fecha de vencimiento\n- Notas');
+        });
+    </script>
+</body>
+</html>

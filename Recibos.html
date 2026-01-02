@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recibos - - Lupe Laguna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #f9fafb; 
+            --color-card: #ffffff; 
+            --color-text-primary: #111827;
+            --color-text-secondary: #4b5563; 
+            --color-text-muted: #9ca3af; 
+            --color-border: #e5e7eb;
+            --color-primary: #3b82f6; 
+            --color-accent: #8b5cf6; 
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --space-sm: 0.75rem; 
+            --space-md: 1rem; 
+            --space-lg: 1.5rem; 
+            --space-xl: 2rem;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--color-bg); 
+            color: var(--color-text-primary); 
+            display: flex; 
+            min-height: 100vh; 
+        }
+        
+        /* SIDEBAR */
+        .sidebar { 
+            width: 240px; 
+            background: white; 
+            border-right: 1px solid var(--color-border); 
+            position: fixed; 
+            top: 0; 
+            bottom: 0; 
+            z-index: 100;
+        }
+        
+        .sidebar-brand {
+            padding: var(--space-xl) var(--space-lg); 
+            border-bottom: 1px solid var(--color-border); 
+            display: flex; 
+            align-items: center; 
+            gap: var(--space-md);
+        }
+        
+        .logo { 
+            width: 36px; 
+            height: 36px; 
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: 700; 
+        }
+        
+        .brand-name { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+        }
+        
+        .sidebar-nav { 
+            padding: var(--space-lg) 0; 
+        }
+        
+        .nav-item { 
+            display: flex; 
+            align-items: center; 
+            gap: var(--space-md); 
+            padding: var(--space-sm) var(--space-lg); 
+            color: var(--color-text-secondary); 
+            text-decoration: none; 
+            transition: all 0.2s;
+            margin: 2px 0;
+        }
+        
+        .nav-item:hover { 
+            background: #f8fafc; 
+            color: var(--color-primary); 
+        }
+        
+        .nav-item.active { 
+            color: var(--color-primary); 
+            background: #eff6ff; 
+            border-left: 3px solid var(--color-primary); 
+        }
+        
+        /* HEADER */
+        .header { 
+            height: 64px; 
+            background: white; 
+            border-bottom: 1px solid var(--color-border); 
+            padding: 0 var(--space-xl); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            position: fixed; 
+            top: 0; 
+            right: 0; 
+            left: 240px; 
+            z-index: 90;
+        }
+        
+        .header-title { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+        }
+        
+        /* CONTENIDO PRINCIPAL */
+        .main-content { 
+            flex: 1; 
+            margin-left: 240px; 
+            margin-top: 64px; 
+            padding: var(--space-xl); 
+            min-height: calc(100vh - 64px);
+        }
+        
+        /* ENCABEZADO DE PÁGINA */
+        .page-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: var(--space-xl); 
+        }
+        
+        .page-title { 
+            font-size: 1.75rem; 
+            font-weight: 600; 
+            margin-bottom: 4px; 
+        }
+        
+        .page-subtitle { 
+            color: var(--color-text-muted); 
+        }
+        
+        /* BARRA DE ACCIONES */
+        .action-bar { 
+            background: white; 
+            border: 1px solid var(--color-border); 
+            border-radius: var(--radius-lg); 
+            padding: var(--space-lg); 
+            margin-bottom: var(--space-xl); 
+            display: flex; 
+            gap: var(--space-lg); 
+            align-items: center; 
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .search-wrapper { 
+            flex: 1; 
+            position: relative; 
+        }
+        
+        .search-icon { 
+            position: absolute; 
+            left: 12px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: var(--color-text-muted); 
+        }
+        
+        .search-input { 
+            width: 100%; 
+            padding: var(--space-sm) var(--space-sm) var(--space-sm) 40px; 
+            border: 1px solid var(--color-border); 
+            border-radius: var(--radius-md); 
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.95rem; 
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus { 
+            outline: none; 
+            border-color: var(--color-primary); 
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); 
+        }
+        
+        .filter-select { 
+            padding: var(--space-sm) var(--space-md); 
+            border: 1px solid var(--color-border); 
+            border-radius: var(--radius-md); 
+            font-family: 'Inter', sans-serif; 
+            background: white; 
+            min-width: 180px; 
+        }
+        
+        /* BOTONES */
+        .btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: var(--radius-md); 
+            font-weight: 500; 
+            cursor: pointer; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            transition: all 0.2s; 
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.95rem; 
+        }
+        
+        .btn-primary { 
+            background: var(--color-primary); 
+            color: white; 
+        }
+        
+        .btn-primary:hover { 
+            background: #2563eb; 
+            transform: translateY(-1px); 
+            box-shadow: var(--shadow-md); 
+        }
+        
+        .btn-success { 
+            background: var(--color-success); 
+            color: white; 
+        }
+        
+        .btn-success:hover { 
+            background: #0da271; 
+        }
+        
+        .btn-warning { 
+            background: var(--color-warning); 
+            color: white; 
+        }
+        
+        .btn-warning:hover { 
+            background: #d97706; 
+        }
+        
+        .btn-outline { 
+            background: white; 
+            color: var(--color-text-secondary); 
+            border: 1px solid var(--color-border); 
+        }
+        
+        .btn-outline:hover { 
+            border-color: var(--color-primary); 
+            color: var(--color-primary); 
+        }
+        
+        .btn-small { 
+            padding: 6px 12px; 
+            font-size: 0.85rem; 
+        }
+        
+        /* VISTA DE RECIBO */
+        .receipt-container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+        
+        .receipt-paper { 
+            background: white; 
+            border: 1px solid var(--color-border); 
+            border-radius: var(--radius-lg); 
+            padding: var(--space-xl); 
+            margin-bottom: var(--space-xl); 
+            box-shadow: var(--shadow-md);
+            position: relative;
+            min-height: 600px;
+        }
+        
+        /* ENCABEZADO DEL RECIBO */
+        .receipt-header { 
+            text-align: center; 
+            padding-bottom: var(--space-lg); 
+            border-bottom: 2px solid var(--color-border); 
+            margin-bottom: var(--space-xl); 
+        }
+        
+        .company-logo { 
+            width: 80px; 
+            height: 80px; 
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: 700; 
+            font-size: 2rem; 
+            margin: 0 auto var(--space-md); 
+        }
+        
+        .company-name { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            margin-bottom: 4px; 
+        }
+        
+        .company-tagline { 
+            color: var(--color-text-muted); 
+            font-size: 0.95rem; 
+        }
+        
+        .receipt-meta { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: var(--space-lg); 
+            padding-top: var(--space-md); 
+            border-top: 1px solid var(--color-border); 
+        }
+        
+        .receipt-number { 
+            font-weight: 600; 
+            color: var(--color-primary); 
+        }
+        
+        /* CUERPO DEL RECIBO */
+        .receipt-body { 
+            margin-bottom: var(--space-xl); 
+        }
+        
+        .section { 
+            margin-bottom: var(--space-xl); 
+        }
+        
+        .section-title { 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            margin-bottom: var(--space-md); 
+            padding-bottom: 8px; 
+            border-bottom: 1px solid var(--color-border); 
+            color: var(--color-text-primary); 
+        }
+        
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: var(--space-md); 
+        }
+        
+        .info-item { 
+            margin-bottom: var(--space-sm); 
+        }
+        
+        .info-label { 
+            font-weight: 500; 
+            color: var(--color-text-secondary); 
+            font-size: 0.9rem; 
+            margin-bottom: 4px; 
+        }
+        
+        .info-value { 
+            font-size: 1rem; 
+            padding: 8px; 
+            background: #f8fafc; 
+            border-radius: var(--radius-md); 
+            border: 1px solid var(--color-border); 
+        }
+        
+        /* TABLA DE DETALLES */
+        .details-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: var(--space-md); 
+        }
+        
+        .details-table th { 
+            background: #f8fafc; 
+            padding: var(--space-md); 
+            text-align: left; 
+            font-weight: 600; 
+            color: var(--color-text-secondary); 
+            border-bottom: 2px solid var(--color-border); 
+        }
+        
+        .details-table td { 
+            padding: var(--space-md); 
+            border-bottom: 1px solid var(--color-border); 
+        }
+        
+        .details-table tr:last-child td { 
+            border-bottom: none; 
+        }
+        
+        .total-row { 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+            background: #f0f9ff; 
+        }
+        
+        /* PIE DEL RECIBO */
+        .receipt-footer { 
+            padding-top: var(--space-xl); 
+            border-top: 2px solid var(--color-border); 
+            text-align: center; 
+            color: var(--color-text-muted); 
+        }
+        
+        .thank-you { 
+            font-size: 1rem; 
+            margin-bottom: var(--space-lg); 
+            color: var(--color-text-primary); 
+        }
+        
+        .signature-area { 
+            margin-top: var(--space-xl); 
+            padding-top: var(--space-lg); 
+            border-top: 1px dashed var(--color-border); 
+        }
+        
+        .signature-line { 
+            width: 200px; 
+            height: 1px; 
+            background: var(--color-text-primary); 
+            margin: 20px auto 8px; 
+        }
+        
+        /* BARRA DE CONTROLES */
+        .controls-bar { 
+            display: flex; 
+            justify-content: center; 
+            gap: var(--space-md); 
+            margin-top: var(--space-xl); 
+            padding: var(--space-lg); 
+            background: white; 
+            border: 1px solid var(--color-border); 
+            border-radius: var(--radius-lg); 
+        }
+        
+        /* LISTA DE RECIBOS */
+        .receipts-list { 
+            background: white; 
+            border: 1px solid var(--color-border); 
+            border-radius: var(--radius-lg); 
+            overflow: hidden; 
+            margin-bottom: var(--space-xl); 
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .list-header { 
+            padding: var(--space-lg); 
+            background: #f8fafc; 
+            border-bottom: 1px solid var(--color-border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .list-title { 
+            font-weight: 600; 
+            color: var(--color-text-primary); 
+        }
+        
+        .list-item { 
+            padding: var(--space-lg); 
+            border-bottom: 1px solid var(--color-border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            transition: all 0.2s; 
+        }
+        
+        .list-item:hover { 
+            background: #f9fafb; 
+        }
+        
+        .list-item:last-child { 
+            border-bottom: none; 
+        }
+        
+        .receipt-info { 
+            flex: 1; 
+        }
+        
+        .receipt-client { 
+            font-weight: 600; 
+            margin-bottom: 4px; 
+        }
+        
+        .receipt-details { 
+            font-size: 0.9rem; 
+            color: var(--color-text-secondary); 
+        }
+        
+        /* WATERMARK PARA VISTA PREVIA */
+        .watermark { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%) rotate(-45deg); 
+            font-size: 4rem; 
+            color: rgba(0,0,0,0.1); 
+            font-weight: 700; 
+            pointer-events: none; 
+            user-select: none; 
+            z-index: 1; 
+        }
+        
+        /* MODAL */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 1000; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content { 
+            background: white; 
+            border-radius: var(--radius-lg); 
+            width: 90%; 
+            max-width: 600px; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .modal-header { 
+            padding: var(--space-lg); 
+            border-bottom: 1px solid var(--color-border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .modal-title { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+        }
+        
+        .modal-body { 
+            padding: var(--space-lg); 
+        }
+        
+        .modal-footer { 
+            padding: var(--space-lg); 
+            border-top: 1px solid var(--color-border); 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: var(--space-md); 
+        }
+        
+        /* TOAST NOTIFICACIONES */
+        .toast { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            padding: var(--space-md) var(--space-lg); 
+            background: white; 
+            border-radius: var(--radius-md); 
+            box-shadow: var(--shadow-lg); 
+            display: flex; 
+            align-items: center; 
+            gap: var(--space-md); 
+            z-index: 1000; 
+            animation: slideInRight 0.3s ease; 
+            border-left: 4px solid var(--color-success); 
+        }
+        
+        @keyframes slideInRight {
+            from { 
+                transform: translateX(100%); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+        
+        .toast-success { 
+            border-left-color: var(--color-success); 
+        }
+        
+        .toast-error { 
+            border-left-color: var(--color-danger); 
+        }
+        
+        .toast-icon { 
+            font-size: 1.2rem; 
+        }
+        
+        /* RESPONSIVE */
+        @media print {
+            .sidebar, .header, .action-bar, .controls-bar {
+                display: none !important;
+            }
+            
+            .main-content {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .receipt-paper {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            
+            .watermark {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .brand-name,
+            .sidebar .nav-item span:not(.fas) {
+                display: none;
+            }
+            
+            .header {
+                left: 70px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar-nav {
+                padding-top: var(--space-md);
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: var(--space-md);
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-wrapper {
+                width: 100%;
+            }
+            
+            .header {
+                padding: 0 var(--space-md);
+            }
+            
+            .main-content {
+                padding: var(--space-md);
+            }
+            
+            .controls-bar {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-md);
+            }
+            
+            .receipt-meta {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <div class="logo">LL</div>
+            <div class="brand-name">Lupe Laguna</div>
+        </div>
+        
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="solares.html" class="nav-item">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Solares</span>
+            </a>
+            <a href="vehiculos.html" class="nav-item">
+                <i class="fas fa-car"></i>
+                <span>Vehículos</span>
+            </a>
+            <a href="deudas.html" class="nav-item">
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>Deudas</span>
+            </a>
+            <a href="clientes.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Clientes</span>
+            </a>
+            <a href="pagos.html" class="nav-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Pagos</span>
+            </a>
+            <a href="recibos.html" class="nav-item active">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Recibos</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div>
+            <div class="header-title">Generación de Recibos</div>
+        </div>
+        <div>
+            <button class="btn btn-primary" onclick="openNewReceiptModal()">
+                <i class="fas fa-plus"></i>
+                <span>Nuevo Recibo</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <!-- ENCABEZADO -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Recibos de Pago</h1>
+                <p class="page-subtitle">Genere, imprima y gestione recibos profesionales</p>
+            </div>
+            <div style="display: flex; gap: var(--space-md);">
+                <button class="btn btn-outline" onclick="showReceiptList()">
+                    <i class="fas fa-list"></i>
+                    <span>Ver Historial</span>
+                </button>
+                <button class="btn btn-outline" onclick="showReceiptPreview()">
+                    <i class="fas fa-eye"></i>
+                    <span>Vista Previa</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- BARRA DE ACCIONES -->
+        <div class="action-bar">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" 
+                       class="search-input" 
+                       id="search-receipts" 
+                       placeholder="Buscar recibos por cliente, número o concepto..."
+                       onkeyup="searchReceipts()">
+            </div>
+            
+            <select class="filter-select" id="filter-month" onchange="filterByMonth()">
+                <option value="all">Todos los meses</option>
+                <option value="12">Diciembre 2024</option>
+                <option value="11">Noviembre 2024</option>
+                <option value="10">Octubre 2024</option>
+            </select>
+            
+            <select class="filter-select" id="filter-type" onchange="filterByType()">
+                <option value="all">Todos los tipos</option>
+                <option value="solar">Solares</option>
+                <option value="vehicle">Vehículos</option>
+                <option value="debt">Deudas</option>
+            </select>
+        </div>
+
+        <!-- VISTA DE RECIBO -->
+        <div class="receipt-container">
+            <!-- PAPEL DEL RECIBO -->
+            <div class="receipt-paper" id="receipt-paper">
+                <!-- Watermark para vista previa -->
+                <div class="watermark">VISTA PREVIA</div>
+                
+                <!-- ENCABEZADO -->
+                <div class="receipt-header">
+                    <div class="company-logo">LL</div>
+                    <div class="company-name">Lupe Laguna</div>
+                    <div class="company-tagline">Servicios Inmobiliarios y Vehiculares</div>
+                    
+                    <div class="receipt-meta">
+                        <div>
+                            <div style="font-weight: 500; color: var(--color-text-secondary); font-size: 0.9rem;">
+                                Número de Recibo
+                            </div>
+                            <div class="receipt-number" id="receipt-number">REC-001-2024</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 500; color: var(--color-text-secondary); font-size: 0.9rem;">
+                                Fecha de Emisión
+                            </div>
+                            <div id="receipt-date">24 de diciembre de 2024</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CUERPO -->
+                <div class="receipt-body">
+                    <!-- INFORMACIÓN DEL CLIENTE -->
+                    <div class="section">
+                        <div class="section-title">Información del Cliente</div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Nombre Completo</div>
+                                <div class="info-value" id="client-name">María Gómez Rodríguez</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Identificación</div>
+                                <div class="info-value" id="client-id">RFC: GORR840101ABC</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Teléfono</div>
+                                <div class="info-value" id="client-phone">+52 331 123 4567</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Email</div>
+                                <div class="info-value" id="client-email">maria.gomez@email.com</div>
+                            </div>
+                            <div class="info-item" style="grid-column: span 2;">
+                                <div class="info-label">Dirección</div>
+                                <div class="info-value" id="client-address">
+                                    Av. Las Flores #123, Col. Centro, Guadalajara, Jalisco. CP 44100
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- DETALLES DEL PAGO -->
+                    <div class="section">
+                        <div class="section-title">Detalles del Pago</div>
+                        <table class="details-table">
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th>Descripción</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payment-details">
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" style="border: none;"></td>
+                                    <td style="font-weight: 600; text-align: right;">Subtotal:</td>
+                                    <td id="subtotal">$5,000.00 MXN</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="border: none;"></td>
+                                    <td style="font-weight: 600; text-align: right;">IVA (16%):</td>
+                                    <td id="iva">$800.00 MXN</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td colspan="3" style="border: none;"></td>
+                                    <td style="font-weight: 700; text-align: right;">TOTAL:</td>
+                                    <td id="total">$5,800.00 MXN</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <!-- INFORMACIÓN ADICIONAL -->
+                    <div class="section">
+                        <div class="section-title">Información Adicional</div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Método de Pago</div>
+                                <div class="info-value" id="payment-method">Transferencia Bancaria</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Referencia</div>
+                                <div class="info-value" id="payment-reference">TRF-789456123</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Fecha del Pago</div>
+                                <div class="info-value" id="payment-date">24/12/2024</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Estado</div>
+                                <div class="info-value" id="payment-status">Completado</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: var(--space-md);">
+                            <div class="info-label">Observaciones</div>
+                            <div class="info-value" id="payment-notes" style="min-height: 60px;">
+                                Pago correspondiente a la mensualidad de diciembre 2024 para el Solar Lote 15 en Col. Las Flores. 
+                                Próximo pago vence el 15 de enero de 2025.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PIE DEL RECIBO -->
+                <div class="receipt-footer">
+                    <div class="thank-you">
+                        ¡Gracias por su preferencia! Este documento es un comprobante de pago válido.
+                    </div>
+                    
+                    <div style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: var(--space-lg);">
+                        Para cualquier aclaración, contacte a:<br>
+                        Lupe Laguna • Tel: 333-123-4567 • Email: contacto@lupelaguna.com
+                    </div>
+                    
+                    <div class="signature-area">
+                        <div class="signature-line"></div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Firma Autorizada</div>
+                        <div>Lupe Laguna</div>
+                        <div style="font-size: 0.9rem; color: var(--color-text-muted);">Gerente General</div>
+                    </div>
+                    
+                    <div style="margin-top: var(--space-xl); font-size: 0.8rem; color: var(--color-text-muted);">
+                        Recibo generado electrónicamente el <span id="generation-date">24/12/2024 14:30</span><br>
+                        Folio fiscal: <span id="folio-fiscal">ABC123456789XYZ</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CONTROLES -->
+            <div class="controls-bar" id="controls-bar">
+                <button class="btn btn-primary" onclick="printReceipt()">
+                    <i class="fas fa-print"></i>
+                    <span>Imprimir Recibo</span>
+                </button>
+                <button class="btn btn-success" onclick="downloadPDF()">
+                    <i class="fas fa-download"></i>
+                    <span>Descargar PDF</span>
+                </button>
+                <button class="btn btn-warning" onclick="sendEmail()">
+                    <i class="fas fa-envelope"></i>
+                    <span>Enviar por Email</span>
+                </button>
+                <button class="btn btn-outline" onclick="duplicateReceipt()">
+                    <i class="fas fa-copy"></i>
+                    <span>Duplicar</span>
+                </button>
+                <button class="btn btn-outline" onclick="customizeReceipt()">
+                    <i class="fas fa-paint-brush"></i>
+                    <span>Personalizar</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- HISTORIAL DE RECIBOS (inicialmente oculto) -->
+        <div id="receipts-history" style="display: none;">
+            <div class="receipts-list">
+                <div class="list-header">
+                    <div class="list-title">Historial de Recibos Generados</div>
+                    <div>
+                        <button class="btn btn-small btn-outline" onclick="showReceiptPreview()">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Volver</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="receipts-list-container">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL NUEVO RECIBO -->
+    <div id="new-receipt-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Generar Nuevo Recibo</h2>
+                <button class="btn btn-small btn-outline" onclick="closeNewReceiptModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div style="margin-bottom: var(--space-lg);">
+                    <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-md);">
+                        <button class="btn btn-outline" style="flex: 1;" onclick="selectFromPayment()">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Desde un Pago</span>
+                        </button>
+                        <button class="btn btn-outline" style="flex: 1;" onclick="createFromScratch()">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Desde Cero</span>
+                        </button>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-muted); text-align: center;">
+                        Seleccione el método para generar el recibo
+                    </div>
+                </div>
+                
+                <form id="receipt-form" style="display: none;">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Cliente</div>
+                            <select class="info-value" style="width: 100%; padding: 8px;" id="select-client">
+                                <option value="">Seleccionar cliente</option>
+                                <option value="1">María Gómez Rodríguez</option>
+                                <option value="2">Juan Pérez López</option>
+                                <option value="3">Carlos Ruiz Martínez</option>
+                            </select>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Tipo de Recibo</div>
+                            <select class="info-value" style="width: 100%; padding: 8px;" id="receipt-type">
+                                <option value="solar">Solar / Terreno</option>
+                                <option value="vehicle">Vehículo</option>
+                                <option value="debt">Deuda Personal</option>
+                                <option value="service">Servicio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="info-item" style="grid-column: span 2;">
+                            <div class="info-label">Concepto</div>
+                            <input type="text" 
+                                   class="info-value" 
+                                   style="width: 100%; padding: 8px;" 
+                                   id="receipt-concept"
+                                   placeholder="Descripción del pago...">
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Monto</div>
+                            <input type="number" 
+                                   class="info-value" 
+                                   style="width: 100%; padding: 8px;" 
+                                   id="receipt-amount"
+                                   step="0.01"
+                                   placeholder="0.00">
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Método de Pago</div>
+                            <select class="info-value" style="width: 100%; padding: 8px;" id="receipt-method">
+                                <option value="transfer">Transferencia</option>
+                                <option value="cash">Efectivo</option>
+                                <option value="card">Tarjeta</option>
+                                <option value="check">Cheque</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- LISTA DE PAGOS PARA SELECCIONAR -->
+                <div id="payments-list" style="display: none;">
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--color-border);">
+                                        Seleccionar
+                                    </th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--color-border);">
+                                        Cliente
+                                    </th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--color-border);">
+                                        Monto
+                                    </th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--color-border);">
+                                        Fecha
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="payments-select-list">
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeNewReceiptModal()">
+                    Cancelar
+                </button>
+                <button class="btn btn-success" id="generate-receipt-btn" onclick="generateReceipt()" style="display: none;">
+                    <i class="fas fa-check"></i>
+                    Generar Recibo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICACIONES -->
+    <div id="toast-container"></div>
+
+    <script>
+        // DATOS DE EJEMPLO
+        const receiptsData = [
+            {
+                id: 1,
+                number: 'REC-001-2024',
+                date: '2024-12-24',
+                client: 'María Gómez Rodríguez',
+                type: 'solar',
+                amount: 5800,
+                method: 'transfer',
+                concept: 'Pago mensualidad Solar Lote 15',
+                status: 'generated',
+                paymentId: 1
+            },
+            {
+                id: 2,
+                number: 'REC-002-2024',
+                date: '2024-12-23',
+                client: 'Juan Pérez López',
+                type: 'vehicle',
+                amount: 15000,
+                method: 'card',
+                concept: 'Enganche vehículo Toyota Corolla',
+                status: 'sent',
+                paymentId: 2
+            },
+            {
+                id: 3,
+                number: 'REC-003-2024',
+                date: '2024-12-22',
+                client: 'Carlos Ruiz Martínez',
+                type: 'debt',
+                amount: 3200,
+                method: 'cash',
+                concept: 'Adeudo pendiente solar',
+                status: 'generated',
+                paymentId: 3
+            }
+        ];
+
+        const clientsData = [
+            {
+                id: 1,
+                name: 'María Gómez Rodríguez',
+                idNumber: 'GORR840101ABC',
+                phone: '+52 331 123 4567',
+                email: 'maria.gomez@email.com',
+                address: 'Av. Las Flores #123, Col. Centro, Guadalajara, Jalisco. CP 44100'
+            },
+            {
+                id: 2,
+                name: 'Juan Pérez López',
+                idNumber: 'PELJ780515XYZ',
+                phone: '+52 333 987 6543',
+                email: 'juan.perez@email.com',
+                address: 'Calle Independencia #456, Tlaquepaque, Jalisco. CP 45600'
+            },
+            {
+                id: 3,
+                name: 'Carlos Ruiz Martínez',
+                idNumber: 'RUMC751230DEF',
+                phone: '+52 332 555 1212',
+                email: 'carlos.ruiz@email.com',
+                address: 'Blvd. López Mateos #789, Zapopan, Jalisco. CP 45050'
+            }
+        ];
+
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos desde localStorage si existen (de pagos.html)
+            const receiptData = localStorage.getItem('receiptData');
+            if (receiptData) {
+                const payment = JSON.parse(receiptData);
+                loadReceiptFromPayment(payment);
+                localStorage.removeItem('receiptData'); // Limpiar después de usar
+            } else {
+                // Cargar recibo por defecto
+                loadDefaultReceipt();
+            }
+            
+            // Configurar fecha actual
+            updateDates();
+            
+            // Cargar historial
+            loadReceiptsHistory();
+        });
+
+        function loadDefaultReceipt() {
+            // Datos por defecto para demostración
+            const defaultClient = clientsData[0];
+            const defaultReceipt = receiptsData[0];
+            
+            // Actualizar UI
+            document.getElementById('client-name').textContent = defaultClient.name;
+            document.getElementById('client-id').textContent = `RFC: ${defaultClient.idNumber}`;
+            document.getElementById('client-phone').textContent = defaultClient.phone;
+            document.getElementById('client-email').textContent = defaultClient.email;
+            document.getElementById('client-address').textContent = defaultClient.address;
+            
+            document.getElementById('receipt-number').textContent = defaultReceipt.number;
+            
+            // Actualizar detalles de pago
+            updatePaymentDetails(defaultReceipt);
+        }
+
+        function loadReceiptFromPayment(payment) {
+            // Buscar cliente
+            const client = clientsData.find(c => c.name === payment.client) || clientsData[0];
+            
+            // Actualizar UI
+            document.getElementById('client-name').textContent = client.name;
+            document.getElementById('client-id').textContent = `RFC: ${client.idNumber}`;
+            document.getElementById('client-phone').textContent = client.phone;
+            document.getElementById('client-email').textContent = client.email;
+            document.getElementById('client-address').textContent = client.address;
+            
+            // Generar número de recibo
+            const receiptNumber = `REC-${String(receiptsData.length + 1).padStart(3, '0')}-2024`;
+            document.getElementById('receipt-number').textContent = receiptNumber;
+            
+            // Actualizar detalles
+            const receiptData = {
+                id: receiptsData.length + 1,
+                number: receiptNumber,
+                date: new Date().toISOString().split('T')[0],
+                client: client.name,
+                type: payment.concept.includes('Solar') ? 'solar' : 
+                      payment.concept.includes('vehículo') ? 'vehicle' : 'debt',
+                amount: payment.amount,
+                method: payment.method,
+                concept: payment.concept,
+                status: 'generated',
+                paymentId: payment.id
+            };
+            
+            updatePaymentDetails(receiptData);
+            
+            // Mostrar mensaje
+            showToast('Recibo cargado desde pago registrado', 'success');
+        }
+
+        function updatePaymentDetails(receipt) {
+            // Actualizar fechas
+            const date = new Date(receipt.date);
+            document.getElementById('receipt-date').textContent = date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('payment-date').textContent = date.toLocaleDateString('es-ES');
+            
+            // Actualizar método de pago
+            const methodText = {
+                'cash': 'Efectivo',
+                'card': 'Tarjeta',
+                'transfer': 'Transferencia Bancaria',
+                'check': 'Cheque'
+            }[receipt.method] || 'Transferencia Bancaria';
+            
+            document.getElementById('payment-method').textContent = methodText;
+            
+            // Generar referencia
+            const reference = receipt.method === 'transfer' ? 'TRF-' + Math.floor(Math.random() * 1000000) :
+                            receipt.method === 'card' ? 'TARJ-' + Math.floor(Math.random() * 100000) :
+                            receipt.method === 'cash' ? 'EFE-' + Math.floor(Math.random() * 1000) : 'CHQ-' + Math.floor(Math.random() * 1000);
+            
+            document.getElementById('payment-reference').textContent = reference;
+            document.getElementById('payment-status').textContent = 'Completado';
+            
+            // Calcular montos
+            const subtotal = receipt.amount / 1.16;
+            const iva = receipt.amount - subtotal;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)} MXN`;
+            document.getElementById('iva').textContent = `$${iva.toFixed(2)} MXN`;
+            document.getElementById('total').textContent = `$${receipt.amount.toFixed(2)} MXN`;
+            
+            // Actualizar detalles de la tabla
+            const detailsBody = document.getElementById('payment-details');
+            detailsBody.innerHTML = `
+                <tr>
+                    <td>${receipt.type === 'solar' ? 'Pago de Solar' : 
+                         receipt.type === 'vehicle' ? 'Pago de Vehículo' : 
+                         'Pago de Deuda'}</td>
+                    <td>${receipt.concept}</td>
+                    <td>1</td>
+                    <td>$${subtotal.toFixed(2)}</td>
+                    <td>$${subtotal.toFixed(2)}</td>
+                </tr>
+            `;
+            
+            // Actualizar observaciones
+            const notes = receipt.type === 'solar' ? 
+                `Pago correspondiente a la mensualidad para el Solar ${receipt.concept.includes('Lote') ? receipt.concept.match(/Lote \d+/)[0] : ''}. 
+                Próximo pago vence el 15 del siguiente mes.` :
+                receipt.type === 'vehicle' ?
+                `Pago correspondiente al enganche del vehículo. Saldo pendiente a financiar.` :
+                `Pago de deuda pendiente. Se recomienda mantener los pagos al corriente.`;
+            
+            document.getElementById('payment-notes').textContent = notes;
+            
+            // Actualizar fecha de generación
+            const now = new Date();
+            document.getElementById('generation-date').textContent = 
+                `${now.toLocaleDateString('es-ES')} ${now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+            
+            // Generar folio fiscal simulado
+            document.getElementById('folio-fiscal').textContent = 
+                `ABC${Math.random().toString(36).substring(2, 15).toUpperCase()}`;
+        }
+
+        function updateDates() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('receipt-date').textContent = now.toLocaleDateString('es-ES', options);
+        }
+
+        function loadReceiptsHistory() {
+            const container = document.getElementById('receipts-list-container');
+            container.innerHTML = '';
+            
+            if (receiptsData.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--space-xl);">
+                        <div style="color: var(--color-text-muted);">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; margin-bottom: var(--space-md);"></i>
+                            <p>No hay recibos generados</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            receiptsData.forEach(receipt => {
+                const date = new Date(receipt.date);
+                const formattedDate = date.toLocaleDateString('es-ES');
+                
+                const statusBadge = receipt.status === 'sent' ? 
+                    '<span style="background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 12px; font-size: 0.85rem;">Enviado</span>' :
+                    '<span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 12px; font-size: 0.85rem;">Generado</span>';
+                
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.onclick = () => loadReceipt(receipt.id);
+                item.innerHTML = `
+                    <div class="receipt-info">
+                        <div class="receipt-client">${receipt.client}</div>
+                        <div class="receipt-details">
+                            ${receipt.number} • ${formattedDate} • ${receipt.concept}
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: var(--space-md);">
+                        <div style="font-weight: 700; color: var(--color-success);">
+                            $${receipt.amount.toLocaleString('es-MX')}
+                        </div>
+                        ${statusBadge}
+                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); downloadReceipt(${receipt.id})">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // FUNCIONES DE UI
+        function showReceiptPreview() {
+            document.getElementById('receipts-history').style.display = 'none';
+            document.querySelector('.receipt-container').style.display = 'block';
+        }
+
+        function showReceiptList() {
+            document.getElementById('receipts-history').style.display = 'block';
+            document.querySelector('.receipt-container').style.display = 'none';
+            loadReceiptsHistory();
+        }
+
+        function loadReceipt(id) {
+            const receipt = receiptsData.find(r => r.id === id);
+            if (!receipt) return;
+            
+            updatePaymentDetails(receipt);
+            showReceiptPreview();
+            showToast('Recibo cargado exitosamente', 'success');
+        }
+
+        // FUNCIONES DE MODAL
+        function openNewReceiptModal() {
+            document.getElementById('new-receipt-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeNewReceiptModal() {
+            document.getElementById('new-receipt-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetModal();
+        }
+
+        function selectFromPayment() {
+            document.getElementById('receipt-form').style.display = 'none';
+            document.getElementById('payments-list').style.display = 'block';
+            document.getElementById('generate-receipt-btn').style.display = 'block';
+            
+            // Cargar lista de pagos (simulada)
+            const paymentsList = document.getElementById('payments-select-list');
+            paymentsList.innerHTML = '';
+            
+            const samplePayments = [
+                { id: 1, client: 'María Gómez Rodríguez', amount: 5000, date: '2024-12-24' },
+                { id: 2, client: 'Juan Pérez López', amount: 15000, date: '2024-12-23' },
+                { id: 3, client: 'Carlos Ruiz Martínez', amount: 3200, date: '2024-12-22' }
+            ];
+            
+            samplePayments.forEach(payment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="padding: 8px;">
+                        <input type="radio" name="selected-payment" value="${payment.id}">
+                    </td>
+                    <td style="padding: 8px;">${payment.client}</td>
+                    <td style="padding: 8px;">$${payment.amount.toLocaleString('es-MX')}</td>
+                    <td style="padding: 8px;">${new Date(payment.date).toLocaleDateString('es-ES')}</td>
+                `;
+                paymentsList.appendChild(row);
+            });
+        }
+
+        function createFromScratch() {
+            document.getElementById('payments-list').style.display = 'none';
+            document.getElementById('receipt-form').style.display = 'block';
+            document.getElementById('generate-receipt-btn').style.display = 'block';
+        }
+
+        function resetModal() {
+            document.getElementById('receipt-form').style.display = 'none';
+            document.getElementById('payments-list').style.display = 'none';
+            document.getElementById('generate-receipt-btn').style.display = 'none';
+            document.getElementById('receipt-form').reset();
+        }
+
+        function generateReceipt() {
+            // Validar formulario o selección
+            const selectedPayment = document.querySelector('input[name="selected-payment"]:checked');
+            
+            if (selectedPayment) {
+                // Generar desde pago seleccionado
+                const paymentId = parseInt(selectedPayment.value);
+                // Aquí se cargarían los datos del pago
+                showToast('Recibo generado desde pago seleccionado', 'success');
+            } else if (document.getElementById('receipt-form').style.display === 'block') {
+                // Generar desde formulario
+                const client = document.getElementById('select-client').value;
+                const concept = document.getElementById('receipt-concept').value;
+                const amount = document.getElementById('receipt-amount').value;
+                
+                if (!client || !concept || !amount) {
+                    showToast('Complete todos los campos requeridos', 'error');
+                    return;
+                }
+                
+                showToast('Recibo generado desde formulario', 'success');
+            } else {
+                showToast('Seleccione un método para generar el recibo', 'error');
+                return;
+            }
+            
+            closeNewReceiptModal();
+            
+            // Recargar recibo actual con nuevos datos
+            setTimeout(() => {
+                loadDefaultReceipt();
+            }, 500);
+        }
+
+        // FUNCIONES DE ACCIÓN
+        function printReceipt() {
+            // Mostrar mensaje de preparación
+            showToast('Preparando recibo para impresión...', 'success');
+            
+            // En una implementación real:
+            // window.print();
+            
+            // Simulación
+            setTimeout(() => {
+                showToast('Recibo enviado a la impresora', 'success');
+            }, 1000);
+        }
+
+        function downloadPDF() {
+            showToast('Generando archivo PDF...', 'success');
+            
+            // Simulación de descarga
+            setTimeout(() => {
+                const fileName = `Recibo-${document.getElementById('receipt-number').textContent}.pdf`;
+                showToast(`PDF descargado: ${fileName}`, 'success');
+                
+                // En una implementación real, aquí se generaría el PDF
+                // y se forzaría la descarga
+            }, 1500);
+        }
+
+        function sendEmail() {
+            const email = prompt('Ingrese el email del cliente:', 
+                                document.getElementById('client-email').textContent);
+            
+            if (email && email.includes('@')) {
+                showToast(`Recibo enviado a: ${email}`, 'success');
+                
+                // En una implementación real, aquí se enviaría el email
+                // con el recibo adjunto
+            } else if (email) {
+                showToast('Email inválido', 'error');
+            }
+        }
+
+        function duplicateReceipt() {
+            const newNumber = `REC-${String(receiptsData.length + 1).padStart(3, '0')}-2024`;
+            
+            // Crear copia del recibo actual
+            const currentReceipt = {
+                ...receiptsData[0],
+                id: receiptsData.length + 1,
+                number: newNumber,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            receiptsData.unshift(currentReceipt);
+            updatePaymentDetails(currentReceipt);
+            
+            showToast('Recibo duplicado exitosamente', 'success');
+        }
+
+        function customizeReceipt() {
+            showToast('Funcionalidad de personalización en desarrollo', 'success');
+            
+            // En una implementación real, aquí se abriría un editor
+            // para personalizar colores, logos, etc.
+        }
+
+        function downloadReceipt(id) {
+            const receipt = receiptsData.find(r => r.id === id);
+            if (!receipt) return;
+            
+            showToast(`Descargando recibo ${receipt.number}...`, 'success');
+            
+            // Prevenir propagación del evento
+            event.stopPropagation();
+        }
+
+        // FUNCIONES DE BÚSQUEDA Y FILTRADO
+        function searchReceipts() {
+            const searchTerm = document.getElementById('search-receipts').value.toLowerCase();
+            
+            if (!searchTerm) {
+                loadReceiptsHistory();
+                return;
+            }
+            
+            const filtered = receiptsData.filter(receipt => 
+                receipt.client.toLowerCase().includes(searchTerm) ||
+                receipt.number.toLowerCase().includes(searchTerm) ||
+                receipt.concept.toLowerCase().includes(searchTerm)
+            );
+            
+            const container = document.getElementById('receipts-list-container');
+            container.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--space-xl);">
+                        <div style="color: var(--color-text-muted);">
+                            <i class="fas fa-search" style="font-size: 2rem; margin-bottom: var(--space-md);"></i>
+                            <p>No se encontraron recibos</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            filtered.forEach(receipt => {
+                const date = new Date(receipt.date);
+                const formattedDate = date.toLocaleDateString('es-ES');
+                
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.onclick = () => loadReceipt(receipt.id);
+                item.innerHTML = `
+                    <div class="receipt-info">
+                        <div class="receipt-client">${receipt.client}</div>
+                        <div class="receipt-details">
+                            ${receipt.number} • ${formattedDate} • ${receipt.concept}
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: var(--space-md);">
+                        <div style="font-weight: 700; color: var(--color-success);">
+                            $${receipt.amount.toLocaleString('es-MX')}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function filterByMonth() {
+            const month = document.getElementById('filter-month').value;
+            showToast(`Filtrando por mes seleccionado`, 'success');
+        }
+
+        function filterByType() {
+            const type = document.getElementById('filter-type').value;
+            showToast(`Filtrando por tipo: ${type}`, 'success');
+        }
+
+        // FUNCIONES DE UI
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            const iconColor = type === 'success' ? 'var(--color-success)' : 'var(--color-danger)';
+            
+            toast.innerHTML = `
+                <i class="fas ${icon} toast-icon" style="color: ${iconColor};"></i>
+                <div>${message}</div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto-remover después de 3 segundos
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

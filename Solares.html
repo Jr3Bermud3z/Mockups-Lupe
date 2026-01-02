@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solares - Lupe Laguna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES (Mismas que el dashboard) --- */
+        :root {
+            --color-bg: #f9fafb;
+            --color-card: #ffffff;
+            --color-sidebar: #ffffff;
+            --color-text-primary: #111827;
+            --color-text-secondary: #4b5563;
+            --color-text-muted: #9ca3af;
+            --color-border: #e5e7eb;
+            --color-primary: #3b82f6;
+            --color-accent: #8b5cf6;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR (Mismo estilo que dashboard) --- */
+        .sidebar {
+            width: 240px;
+            background-color: var(--color-sidebar);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: var(--space-xl) var(--space-lg);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .sidebar-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-lg) 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-lg);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            margin: 2px 0;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: var(--color-primary);
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .nav-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* --- HEADER (Mismo estilo) --- */
+        .header {
+            height: 64px;
+            background-color: var(--color-card);
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-header);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-xl);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 240px;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .page-title h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            white-space: nowrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            padding-left: 40px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+            font-size: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        /* --- CONTENIDO PRINCIPAL SOLARES --- */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            margin-top: 64px;
+            padding: var(--space-xl);
+        }
+
+        /* Encabezado de la página */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .page-header p {
+            color: var(--color-text-muted);
+            margin-top: 4px;
+        }
+
+        /* Botón principal */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* Barra de filtros simple */
+        .filters-bar {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            display: flex;
+            gap: var(--space-lg);
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .filter-label {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: white;
+            color: var(--color-text-primary);
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+
+        /* Estadísticas rápidas */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .stat-card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            padding: var(--space-lg);
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--color-primary);
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Grid de solares - VISUAL SIMPLE */
+        .lots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        /* Tarjeta de solar */
+        .lot-card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .lot-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Encabezado de tarjeta */
+        .lot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .lot-id {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* Badge de estado */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-available {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .status-sold {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--color-accent);
+        }
+
+        .status-reserved {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+        }
+
+        /* Detalles del solar */
+        .lot-details {
+            margin-bottom: var(--space-lg);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-sm);
+        }
+
+        .detail-label {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            color: var(--color-text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .detail-value.price {
+            color: var(--color-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Botones de acción */
+        .lot-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: var(--space-sm);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: white;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background-color: #eff6ff;
+        }
+
+        .action-btn.primary {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .action-btn.primary:hover {
+            background-color: #2563eb;
+        }
+
+        /* Modal simple (para formularios) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            padding: var(--space-xl);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .lots-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .header, .main-content {
+                left: 0;
+                margin-left: 0;
+            }
+            
+            .lots-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-md);
+            }
+            
+            .lot-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">LL</div>
+            <div class="sidebar-logo-text">Lupe Laguna</div>
+        </div>
+        
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div class="nav-text">Home</div>
+            </a>
+            <a href="solares.html" class="nav-item active">
+                <div class="nav-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <div class="nav-text">Solares</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-car"></i></div>
+                <div class="nav-text">Vehículos</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <div class="nav-text">Deudas Personales</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-users"></i></div>
+                <div class="nav-text">Clientes</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="nav-text">Pagos</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="nav-text">Recibos</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="header-left">
+            <div class="page-title">
+                <h1>Solares</h1>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar por lote, cliente o manzana..." id="searchInput">
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <button class="btn-primary" id="addSolarBtn">
+                <i class="fas fa-plus"></i>
+                Nuevo Solar
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content" id="mainContent">
+        <!-- Encabezado de página -->
+        <div class="page-header">
+            <div>
+                <h1>Inventario de Solares</h1>
+                <p>Gestiona todos los terrenos disponibles para venta</p>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Disponibles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Vendidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Reservados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+
+        <!-- Barra de filtros simple -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <span class="filter-label">Estado:</span>
+                <select class="filter-select" id="filterStatus">
+                    <option value="all">Todos los estados</option>
+                    <option value="available">Disponible</option>
+                    <option value="sold">Vendido</option>
+                    <option value="reserved">Reservado</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Manzana:</span>
+                <select class="filter-select" id="filterBlock">
+                    <option value="all">Todas las manzanas</option>
+                    <option value="A">Manzana A</option>
+                    <option value="B">Manzana B</option>
+                    <option value="C">Manzana C</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Ordenar por:</span>
+                <select class="filter-select" id="sortBy">
+                    <option value="lot">Lote (A-Z)</option>
+                    <option value="price-desc">Precio (Mayor a menor)</option>
+                    <option value="price-asc">Precio (Menor a mayor)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Grid de solares -->
+        <div class="lots-grid" id="lotsContainer">
+            <!-- Solar 1 -->
+            <div class="lot-card" data-status="available" data-block="A">
+                <div class="lot-header">
+                    <div class="lot-id">Lote A-01</div>
+                    <span class="status-badge status-available">Disponible</span>
+                </div>
+                <div class="lot-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Manzana:</span>
+                        <span class="detail-value">A</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dimensiones:</span>
+                        <span class="detail-value">250 m²</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Precio:</span>
+                        <span class="detail-value price">$15,000</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Cliente:</span>
+                        <span class="detail-value">-</span>
+                    </div>
+                </div>
+                <div class="lot-actions">
+                    <button class="action-btn" onclick="viewSolarDetails('A-01')">
+                        <i class="fas fa-eye"></i>
+                        Ver
+                    </button>
+                    <button class="action-btn primary" onclick="sellSolar('A-01')">
+                        <i class="fas fa-shopping-cart"></i>
+                        Vender
+                    </button>
+                </div>
+            </div>
+
+            <!-- Solar 2 -->
+            <div class="lot-card" data-status="sold" data-block="B">
+                <div class="lot-header">
+                    <div class="lot-id">Lote B-05</div>
+                    <span class="status-badge status-sold">Vendido</span>
+                </div>
+                <div class="lot-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Manzana:</span>
+                        <span class="detail-value">B</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dimensiones:</span>
+                        <span class="detail-value">300 m²</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Precio:</span>
+                        <span class="detail-value price">$18,500</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Cliente:</span>
+                        <span class="detail-value">María Gómez</span>
+                    </div>
+                </div>
+                <div class="lot-actions">
+                    <button class="action-btn" onclick="viewSolarDetails('B-05')">
+                        <i class="fas fa-file-contract"></i>
+                        Contrato
+                    </button>
+                    <button class="action-btn" onclick="viewHistory('B-05')">
+                        <i class="fas fa-history"></i>
+                        Historial
+                    </button>
+                </div>
+            </div>
+
+            <!-- Solar 3 -->
+            <div class="lot-card" data-status="reserved" data-block="A">
+                <div class="lot-header">
+                    <div class="lot-id">Lote A-03</div>
+                    <span class="status-badge status-reserved">Reservado</span>
+                </div>
+                <div class="lot-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Manzana:</span>
+                        <span class="detail-value">A</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dimensiones:</span>
+                        <span class="detail-value">275 m²</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Precio:</span>
+                        <span class="detail-value price">$16,200</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Cliente:</span>
+                        <span class="detail-value">Carlos Ruiz</span>
+                    </div>
+                </div>
+                <div class="lot-actions">
+                    <button class="action-btn" onclick="viewReservation('A-03')">
+                        <i class="fas fa-calendar-check"></i>
+                        Reserva
+                    </button>
+                    <button class="action-btn primary" onclick="confirmSale('A-03')">
+                        <i class="fas fa-check-circle"></i>
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Solar 4 -->
+            <div class="lot-card" data-status="available" data-block="C">
+                <div class="lot-header">
+                    <div class="lot-id">Lote C-02</div>
+                    <span class="status-badge status-available">Disponible</span>
+                </div>
+                <div class="lot-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Manzana:</span>
+                        <span class="detail-value">C</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dimensiones:</span>
+                        <span class="detail-value">320 m²</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Precio:</span>
+                        <span class="detail-value price">$20,000</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Cliente:</span>
+                        <span class="detail-value">-</span>
+                    </div>
+                </div>
+                <div class="lot-actions">
+                    <button class="action-btn" onclick="viewSolarDetails('C-02')">
+                        <i class="fas fa-eye"></i>
+                        Ver
+                    </button>
+                    <button class="action-btn primary" onclick="sellSolar('C-02')">
+                        <i class="fas fa-shopping-cart"></i>
+                        Vender
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para nuevo solar -->
+    <div class="modal" id="newSolarModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nuevo Solar</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="newSolarForm">
+                <div style="display: grid; gap: var(--space-md);">
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; color: var(--color-text-secondary); font-size: 0.9rem;">
+                            Lote (ej: A-01)
+                        </label>
+                        <input type="text" style="width: 100%; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px;" required>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; color: var(--color-text-secondary); font-size: 0.9rem;">
+                            Manzana
+                        </label>
+                        <select style="width: 100%; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px;">
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; color: var(--color-text-secondary); font-size: 0.9rem;">
+                            Dimensiones (m²)
+                        </label>
+                        <input type="number" style="width: 100%; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px;" required>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; color: var(--color-text-secondary); font-size: 0.9rem;">
+                            Precio ($)
+                        </label>
+                        <input type="number" style="width: 100%; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px;" required>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; color: var(--color-text-secondary); font-size: 0.9rem;">
+                            Notas adicionales
+                        </label>
+                        <textarea style="width: 100%; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px; min-height: 80px;"></textarea>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-xl);">
+                    <button type="button" class="action-btn" style="flex: 1;" onclick="closeModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="action-btn primary" style="flex: 1;">
+                        <i class="fas fa-save"></i>
+                        Guardar Solar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filtros
+            const filterStatus = document.getElementById('filterStatus');
+            const filterBlock = document.getElementById('filterBlock');
+            const sortBy = document.getElementById('sortBy');
+            const searchInput = document.getElementById('searchInput');
+            const lotsContainer = document.getElementById('lotsContainer');
+            const lotCards = document.querySelectorAll('.lot-card');
+            
+            // Función para aplicar filtros
+            function applyFilters() {
+                const status = filterStatus.value;
+                const block = filterBlock.value;
+                const search = searchInput.value.toLowerCase();
+                const sort = sortBy.value;
+                
+                let visibleCards = [];
+                
+                // Filtrar
+                lotCards.forEach(card => {
+                    const cardStatus = card.getAttribute('data-status');
+                    const cardBlock = card.getAttribute('data-block');
+                    const cardText = card.textContent.toLowerCase();
+                    
+                    const statusMatch = status === 'all' || cardStatus === status;
+                    const blockMatch = block === 'all' || cardBlock === block;
+                    const searchMatch = search === '' || cardText.includes(search);
+                    
+                    if (statusMatch && blockMatch && searchMatch) {
+                        card.style.display = 'block';
+                        visibleCards.push(card);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Ordenar
+                if (sort === 'price-desc') {
+                    visibleCards.sort((a, b) => {
+                        const priceA = parseInt(a.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                        const priceB = parseInt(b.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                        return priceB - priceA;
+                    });
+                } else if (sort === 'price-asc') {
+                    visibleCards.sort((a, b) => {
+                        const priceA = parseInt(a.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                        const priceB = parseInt(b.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                        return priceA - priceB;
+                    });
+                } else {
+                    // Ordenar por lote (A-Z)
+                    visibleCards.sort((a, b) => {
+                        const lotA = a.querySelector('.lot-id').textContent;
+                        const lotB = b.querySelector('.lot-id').textContent;
+                        return lotA.localeCompare(lotB);
+                    });
+                }
+                
+                // Reordenar en el DOM
+                visibleCards.forEach(card => {
+                    lotsContainer.appendChild(card);
+                });
+            }
+            
+            // Event listeners para filtros
+            filterStatus.addEventListener('change', applyFilters);
+            filterBlock.addEventListener('change', applyFilters);
+            sortBy.addEventListener('change', applyFilters);
+            searchInput.addEventListener('input', applyFilters);
+            
+            // Modal para nuevo solar
+            const addSolarBtn = document.getElementById('addSolarBtn');
+            const newSolarModal = document.getElementById('newSolarModal');
+            const newSolarForm = document.getElementById('newSolarForm');
+            
+            addSolarBtn.addEventListener('click', function() {
+                newSolarModal.style.display = 'flex';
+            });
+            
+            function closeModal() {
+                newSolarModal.style.display = 'none';
+            }
+            
+            newSolarForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Solar agregado exitosamente. En una implementación real, esto enviaría los datos al servidor.');
+                closeModal();
+                this.reset();
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            newSolarModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // Funciones para botones de acción
+            window.viewSolarDetails = function(lotId) {
+                alert(`Mostrando detalles del solar ${lotId}\n\nAquí iría toda la información detallada, fotos, documentos, etc.`);
+            };
+            
+            window.sellSolar = function(lotId) {
+                alert(`Iniciando proceso de venta para el solar ${lotId}\n\nSe abriría un formulario para seleccionar cliente, forma de pago, generar contrato, etc.`);
+            };
+            
+            window.viewReservation = function(lotId) {
+                alert(`Mostrando detalles de reserva del solar ${lotId}\n\nCliente, fecha de reserva, condiciones, etc.`);
+            };
+            
+            window.confirmSale = function(lotId) {
+                if (confirm(`¿Confirmar venta del solar ${lotId}?`)) {
+                    alert(`Venta confirmada. El solar cambiará a estado "Vendido".`);
+                }
+            };
+            
+            window.viewHistory = function(lotId) {
+                alert(`Mostrando historial del solar ${lotId}\n\nTodas las transacciones, reservas, pagos, etc.`);
+            };
+        });
+    </script>
+</body>
+</html>

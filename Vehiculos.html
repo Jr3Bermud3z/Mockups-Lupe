@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehículos - Lupe Laguna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES (Mismas que las otras páginas) --- */
+        :root {
+            --color-bg: #f9fafb;
+            --color-card: #ffffff;
+            --color-sidebar: #ffffff;
+            --color-text-primary: #111827;
+            --color-text-secondary: #4b5563;
+            --color-text-muted: #9ca3af;
+            --color-border: #e5e7eb;
+            --color-primary: #3b82f6;
+            --color-accent: #8b5cf6;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR (Mismo estilo) --- */
+        .sidebar {
+            width: 240px;
+            background-color: var(--color-sidebar);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: var(--space-xl) var(--space-lg);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .sidebar-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-lg) 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-lg);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            margin: 2px 0;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: var(--color-primary);
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .nav-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* --- HEADER (Mismo estilo) --- */
+        .header {
+            height: 64px;
+            background-color: var(--color-card);
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-header);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-xl);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 240px;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .page-title h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            white-space: nowrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            padding-left: 40px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+            font-size: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        /* --- CONTENIDO PRINCIPAL VEHÍCULOS --- */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            margin-top: 64px;
+            padding: var(--space-xl);
+        }
+
+        /* Encabezado de la página */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-xl);
+        }
+
+        .page-header-text h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .page-header-text p {
+            color: var(--color-text-muted);
+        }
+
+        /* Botón principal */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* Pestañas de tipo de vehículo */
+        .vehicle-tabs {
+            display: flex;
+            gap: 2px;
+            background-color: #f3f4f6;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: var(--space-xl);
+            max-width: 400px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            background: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background-color: white;
+            color: var(--color-primary);
+            box-shadow: var(--shadow-card);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+
+        /* Barra de estadísticas */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .stat-card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            padding: var(--space-lg);
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--color-primary);
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Barra de filtros */
+        .filters-bar {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            display: flex;
+            gap: var(--space-lg);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .filter-label {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: white;
+            color: var(--color-text-primary);
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+
+        /* Grid de vehículos */
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        /* Tarjeta de vehículo */
+        .vehicle-card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vehicle-card:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Indicador de tipo (Auto/Moto) */
+        .vehicle-type {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-car {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--color-primary);
+        }
+
+        .type-moto {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--color-accent);
+        }
+
+        /* Encabezado de tarjeta */
+        .vehicle-header {
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .vehicle-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .vehicle-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Badge de estado */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .status-available {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .status-sold {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--color-accent);
+        }
+
+        .status-reserved {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+        }
+
+        /* Detalles del vehículo */
+        .vehicle-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            color: var(--color-text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+            color: var(--color-text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .detail-value.price {
+            color: var(--color-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Información adicional */
+        .additional-info {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+            margin-bottom: var(--space-md);
+            padding: var(--space-sm);
+            background-color: #f9fafb;
+            border-radius: 6px;
+        }
+
+        /* Botones de acción */
+        .vehicle-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: var(--space-sm);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: white;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background-color: #eff6ff;
+        }
+
+        .action-btn.primary {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .action-btn.primary:hover {
+            background-color: #2563eb;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .vehicles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .header, .main-content {
+                left: 0;
+                margin-left: 0;
+            }
+            
+            .vehicles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-md);
+            }
+            
+            .vehicle-actions {
+                flex-direction: column;
+            }
+            
+            .vehicle-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">LL</div>
+            <div class="sidebar-logo-text">Lupe Laguna</div>
+        </div>
+        
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div class="nav-text">Home</div>
+            </a>
+            <a href="solares.html" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <div class="nav-text">Solares</div>
+            </a>
+            <a href="vehiculos.html" class="nav-item active">
+                <div class="nav-icon"><i class="fas fa-car"></i></div>
+                <div class="nav-text">Vehículos</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <div class="nav-text">Deudas Personales</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-users"></i></div>
+                <div class="nav-text">Clientes</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="nav-text">Pagos</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="nav-text">Recibos</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="header-left">
+            <div class="page-title">
+                <h1>Vehículos</h1>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar por marca, modelo, placa..." id="searchInput">
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <button class="btn-primary" id="addVehicleBtn">
+                <i class="fas fa-plus"></i>
+                Nuevo Vehículo
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content" id="mainContent">
+        <!-- Encabezado de página -->
+        <div class="page-header">
+            <div class="page-header-text">
+                <h1>Inventario de Vehículos</h1>
+                <p>Gestiona autos y motos disponibles para venta</p>
+            </div>
+        </div>
+
+        <!-- Pestañas de tipo -->
+        <div class="vehicle-tabs">
+            <button class="tab-btn active" data-type="all">
+                <i class="fas fa-car-side"></i>
+                Todos
+            </button>
+            <button class="tab-btn" data-type="car">
+                <i class="fas fa-car"></i>
+                Autos
+            </button>
+            <button class="tab-btn" data-type="moto">
+                <i class="fas fa-motorcycle"></i>
+                Motos
+            </button>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Disponibles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Vendidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Reservados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+
+        <!-- Barra de filtros -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <span class="filter-label">Estado:</span>
+                <select class="filter-select" id="filterStatus">
+                    <option value="all">Todos los estados</option>
+                    <option value="available">Disponible</option>
+                    <option value="sold">Vendido</option>
+                    <option value="reserved">Reservado</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Marca:</span>
+                <select class="filter-select" id="filterBrand">
+                    <option value="all">Todas las marcas</option>
+                    <option value="toyota">Toyota</option>
+                    <option value="honda">Honda</option>
+                    <option value="nissan">Nissan</option>
+                    <option value="suzuki">Suzuki</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Año:</span>
+                <select class="filter-select" id="filterYear">
+                    <option value="all">Todos los años</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Ordenar por:</span>
+                <select class="filter-select" id="sortBy">
+                    <option value="date">Fecha (Más nuevo)</option>
+                    <option value="price-desc">Precio (Mayor a menor)</option>
+                    <option value="price-asc">Precio (Menor a mayor)</option>
+                    <option value="year-desc">Año (Más nuevo)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Grid de vehículos -->
+        <div class="vehicles-grid" id="vehiclesContainer">
+            <!-- Auto 1 - Disponible -->
+            <div class="vehicle-card" data-type="car" data-status="available" data-brand="toyota" data-year="2022">
+                <div class="vehicle-type type-car">Auto</div>
+                
+                <div class="vehicle-header">
+                    <div class="vehicle-title">Toyota Hilux</div>
+                    <div class="vehicle-subtitle">2022 • Doble Cabina • 4x4</div>
+                    <span class="status-badge status-available">Disponible</span>
+                </div>
+                
+                <div class="vehicle-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Placa</span>
+                        <span class="detail-value">ABC-123</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Kilometraje</span>
+                        <span class="detail-value">25,000 km</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Color</span>
+                        <span class="detail-value">Blanco</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Precio</span>
+                        <span class="detail-value price">$28,500</span>
+                    </div>
+                </div>
+                
+                <div class="additional-info">
+                    Vehículo en excelente estado, único dueño, mantenimiento al día.
+                </div>
+                
+                <div class="vehicle-actions">
+                    <button class="action-btn" onclick="viewVehicleDetails('toyota-hilux-2022')">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalles
+                    </button>
+                    <button class="action-btn primary" onclick="sellVehicle('toyota-hilux-2022')">
+                        <i class="fas fa-shopping-cart"></i>
+                        Vender
+                    </button>
+                </div>
+            </div>
+
+            <!-- Moto 1 - Vendida -->
+            <div class="vehicle-card" data-type="moto" data-status="sold" data-brand="honda" data-year="2021">
+                <div class="vehicle-type type-moto">Moto</div>
+                
+                <div class="vehicle-header">
+                    <div class="vehicle-title">Honda CB 250</div>
+                    <div class="vehicle-subtitle">2021 • 250cc • Inyección</div>
+                    <span class="status-badge status-sold">Vendida</span>
+                </div>
+                
+                <div class="vehicle-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Placa</span>
+                        <span class="detail-value">XYZ-789</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Kilometraje</span>
+                        <span class="detail-value">8,500 km</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Color</span>
+                        <span class="detail-value">Rojo</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Precio</span>
+                        <span class="detail-value price">$3,200</span>
+                    </div>
+                </div>
+                
+                <div class="additional-info">
+                    Vendida a Juan Pérez el 15/04/2024. Factura y papeles entregados.
+                </div>
+                
+                <div class="vehicle-actions">
+                    <button class="action-btn" onclick="viewContract('honda-cb250-2021')">
+                        <i class="fas fa-file-contract"></i>
+                        Contrato
+                    </button>
+                    <button class="action-btn" onclick="viewVehicleHistory('honda-cb250-2021')">
+                        <i class="fas fa-history"></i>
+                        Historial
+                    </button>
+                </div>
+            </div>
+
+            <!-- Auto 2 - Reservado -->
+            <div class="vehicle-card" data-type="car" data-status="reserved" data-brand="nissan" data-year="2023">
+                <div class="vehicle-type type-car">Auto</div>
+                
+                <div class="vehicle-header">
+                    <div class="vehicle-title">Nissan Versa</div>
+                    <div class="vehicle-subtitle">2023 • Sedán • Automático</div>
+                    <span class="status-badge status-reserved">Reservado</span>
+                </div>
+                
+                <div class="vehicle-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Placa</span>
+                        <span class="detail-value">DEF-456</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Kilometraje</span>
+                        <span class="detail-value">12,000 km</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Color</span>
+                        <span class="detail-value">Gris</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Precio</span>
+                        <span class="detail-value price">$18,900</span>
+                    </div>
+                </div>
+                
+                <div class="additional-info">
+                    Reservado por María Gómez. Seña de $1,000. Entrega pactada para 30/05/2024.
+                </div>
+                
+                <div class="vehicle-actions">
+                    <button class="action-btn" onclick="viewReservation('nissan-versa-2023')">
+                        <i class="fas fa-calendar-check"></i>
+                        Reserva
+                    </button>
+                    <button class="action-btn primary" onclick="confirmVehicleSale('nissan-versa-2023')">
+                        <i class="fas fa-check-circle"></i>
+                        Confirmar Venta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Moto 2 - Disponible -->
+            <div class="vehicle-card" data-type="moto" data-status="available" data-brand="suzuki" data-year="2024">
+                <div class="vehicle-type type-moto">Moto</div>
+                
+                <div class="vehicle-header">
+                    <div class="vehicle-title">Suzuki GSX-S150</div>
+                    <div class="vehicle-subtitle">2024 • 150cc • Naked</div>
+                    <span class="status-badge status-available">Disponible</span>
+                </div>
+                
+                <div class="vehicle-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Placa</span>
+                        <span class="detail-value">Por matricular</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Kilometraje</span>
+                        <span class="detail-value">0 km</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Color</span>
+                        <span class="detail-value">Azul/Blanco</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Precio</span>
+                        <span class="detail-value price">$3,800</span>
+                    </div>
+                </div>
+                
+                <div class="additional-info">
+                    Nuevo de agencia. Factura original. Entrega inmediata.
+                </div>
+                
+                <div class="vehicle-actions">
+                    <button class="action-btn" onclick="viewVehicleDetails('suzuki-gsxs150-2024')">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalles
+                    </button>
+                    <button class="action-btn primary" onclick="sellVehicle('suzuki-gsxs150-2024')">
+                        <i class="fas fa-shopping-cart"></i>
+                        Vender
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const filterStatus = document.getElementById('filterStatus');
+            const filterBrand = document.getElementById('filterBrand');
+            const filterYear = document.getElementById('filterYear');
+            const sortBy = document.getElementById('sortBy');
+            const searchInput = document.getElementById('searchInput');
+            const vehiclesContainer = document.getElementById('vehiclesContainer');
+            const vehicleCards = document.querySelectorAll('.vehicle-card');
+            const addVehicleBtn = document.getElementById('addVehicleBtn');
+            
+            // Variables de filtro
+            let currentType = 'all';
+            let currentStatus = 'all';
+            let currentBrand = 'all';
+            let currentYear = 'all';
+            let currentSort = 'date';
+            let currentSearch = '';
+            
+            // Cambiar pestañas
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remover clase active de todas las pestañas
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    // Agregar clase active a la pestaña clickeada
+                    this.classList.add('active');
+                    // Actualizar tipo actual
+                    currentType = this.getAttribute('data-type');
+                    // Aplicar filtros
+                    applyFilters();
+                });
+            });
+            
+            // Aplicar filtros
+            function applyFilters() {
+                currentStatus = filterStatus.value;
+                currentBrand = filterBrand.value;
+                currentYear = filterYear.value;
+                currentSort = sortBy.value;
+                currentSearch = searchInput.value.toLowerCase();
+                
+                let visibleCards = [];
+                
+                // Filtrar vehículos
+                vehicleCards.forEach(card => {
+                    const cardType = card.getAttribute('data-type');
+                    const cardStatus = card.getAttribute('data-status');
+                    const cardBrand = card.getAttribute('data-brand');
+                    const cardYear = card.getAttribute('data-year');
+                    const cardText = card.textContent.toLowerCase();
+                    
+                    // Aplicar filtros
+                    const typeMatch = currentType === 'all' || cardType === currentType;
+                    const statusMatch = currentStatus === 'all' || cardStatus === currentStatus;
+                    const brandMatch = currentBrand === 'all' || cardBrand === currentBrand;
+                    const yearMatch = currentYear === 'all' || cardYear === currentYear;
+                    const searchMatch = currentSearch === '' || cardText.includes(currentSearch);
+                    
+                    if (typeMatch && statusMatch && brandMatch && yearMatch && searchMatch) {
+                        card.style.display = 'block';
+                        visibleCards.push(card);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Ordenar vehículos
+                sortVehicles(visibleCards, currentSort);
+                
+                // Reordenar en el DOM
+                visibleCards.forEach(card => {
+                    vehiclesContainer.appendChild(card);
+                });
+                
+                // Actualizar contador de estadísticas
+                updateStats(visibleCards);
+            }
+            
+            // Función para ordenar vehículos
+            function sortVehicles(cards, sortBy) {
+                cards.sort((a, b) => {
+                    switch(sortBy) {
+                        case 'price-desc':
+                            const priceA = parseInt(a.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                            const priceB = parseInt(b.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                            return priceB - priceA;
+                            
+                        case 'price-asc':
+                            const priceC = parseInt(a.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                            const priceD = parseInt(b.querySelector('.price').textContent.replace(/[^0-9]/g, ''));
+                            return priceC - priceD;
+                            
+                        case 'year-desc':
+                            const yearA = parseInt(a.getAttribute('data-year'));
+                            const yearB = parseInt(b.getAttribute('data-year'));
+                            return yearB - yearA;
+                            
+                        default: // 'date' o por defecto
+                            // Aquí podrías ordenar por fecha de ingreso si tuvieras el atributo
+                            return 0;
+                    }
+                });
+            }
+            
+            // Actualizar estadísticas en tiempo real
+            function updateStats(visibleCards) {
+                const stats = {
+                    available: 0,
+                    sold: 0,
+                    reserved: 0,
+                    total: visibleCards.length
+                };
+                
+                visibleCards.forEach(card => {
+                    const status = card.getAttribute('data-status');
+                    if (stats[status] !== undefined) {
+                        stats[status]++;
+                    }
+                });
+                
+                // En una implementación real, actualizarías los números en las tarjetas de estadísticas
+                console.log('Estadísticas actualizadas:', stats);
+            }
+            
+            // Event listeners para filtros
+            filterStatus.addEventListener('change', applyFilters);
+            filterBrand.addEventListener('change', applyFilters);
+            filterYear.addEventListener('change', applyFilters);
+            sortBy.addEventListener('change', applyFilters);
+            searchInput.addEventListener('input', applyFilters);
+            
+            // Botón para agregar vehículo
+            addVehicleBtn.addEventListener('click', function() {
+                alert('Formulario para agregar nuevo vehículo\n\nSe abriría un modal con campos para:\n- Tipo (Auto/Moto)\n- Marca/Modelo\n- Año\n- Placa\n- Kilometraje\n- Color\n- Precio\n- Descripción');
+            });
+            
+            // Funciones para botones de acción
+            window.viewVehicleDetails = function(vehicleId) {
+                alert(`Mostrando detalles completos del vehículo: ${vehicleId}\n\nIncluiría:\n- Fotos del vehículo\n- Historial de mantenimiento\n- Documentación (factura, SOAT, etc.)\n- Notas adicionales`);
+            };
+            
+            window.sellVehicle = function(vehicleId) {
+                alert(`Iniciando proceso de venta para: ${vehicleId}\n\nSe abriría formulario para:\n- Seleccionar cliente\n- Definir forma de pago\n- Generar contrato\n- Registrar entrega`);
+            };
+            
+            window.viewContract = function(vehicleId) {
+                alert(`Mostrando contrato de venta de: ${vehicleId}\n\nDocumento PDF con:\n- Datos del vehículo\n- Datos del comprador\n- Términos de la venta\n- Plan de pagos\n- Firmas`);
+            };
+            
+            window.viewVehicleHistory = function(vehicleId) {
+                alert(`Mostrando historial de: ${vehicleId}\n\n- Fecha de ingreso al inventario\n- Mantenimientos realizados\n- Reservas anteriores\n- Venta actual`);
+            };
+            
+            window.viewReservation = function(vehicleId) {
+                alert(`Mostrando detalles de reserva: ${vehicleId}\n\n- Cliente que reservó\n- Monto de seña\n- Fecha de reserva\n- Fecha de entrega pactada\n- Condiciones especiales`);
+            };
+            
+            window.confirmVehicleSale = function(vehicleId) {
+                if (confirm(`¿Confirmar venta del vehículo ${vehicleId}?\n\nEsto cambiará el estado a "Vendido" y generará el contrato final.`)) {
+                    alert(`Venta confirmada. Estado actualizado a "Vendido". Generando documentos finales...`);
+                }
+            };
+            
+            // Aplicar filtros iniciales
+            applyFilters();
+        });
+    </script>
+</body>
+</html>

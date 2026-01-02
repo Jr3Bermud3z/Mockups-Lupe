@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Lupe Laguna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES DE DISEÑO --- */
+        :root {
+            /* Paleta Minimalista */
+            --color-bg: #f9fafb;
+            --color-card: #ffffff;
+            --color-sidebar: #ffffff;
+            
+            /* Jerarquía de texto */
+            --color-text-primary: #111827;
+            --color-text-secondary: #4b5563;
+            --color-text-muted: #9ca3af;
+            
+            /* Elementos de UI */
+            --color-border: #e5e7eb;
+            --color-primary: #3b82f6;
+            --color-accent: #8b5cf6;
+            
+            /* Estados semánticos */
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            
+            /* Sombras minimalistas */
+            --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.1);
+            
+            /* Espaciado sistemático */
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR BLANCO --- */
+        .sidebar {
+            width: 240px;
+            background-color: var(--color-sidebar);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: var(--space-xl) var(--space-lg);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .sidebar-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-lg) 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-lg);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            margin: 2px 0;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: var(--color-primary);
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .nav-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background-color: #fef3c7;
+            color: #92400e;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            height: 64px;
+            background-color: var(--color-card);
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-header);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-xl);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 240px;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .page-title h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            white-space: nowrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            padding-left: 40px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #f9fafb;
+            transition: all 0.2s;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+            font-size: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .notification-btn:hover {
+            background-color: #f3f4f6;
+            color: var(--color-primary);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile:hover {
+            background-color: #f3f4f6;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            margin-top: 64px;
+            padding: var(--space-xl);
+        }
+
+        /* Sección de bienvenida */
+        .welcome-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .welcome-subtitle {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Grid principal - 2 columnas */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        /* Columna izquierda - KPIs y Actividad */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        /* Grid de KPIs */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+        }
+
+        /* Tarjetas KPI */
+        .kpi-card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .kpi-card.solares::before { background-color: var(--color-primary); }
+        .kpi-card.vehiculos::before { background-color: var(--color-accent); }
+        .kpi-card.deudas::before { background-color: var(--color-warning); }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+
+        .kpi-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .kpi-card.solares .kpi-icon { 
+            background-color: rgba(59, 130, 246, 0.1); 
+            color: var(--color-primary); 
+        }
+        .kpi-card.vehiculos .kpi-icon { 
+            background-color: rgba(139, 92, 246, 0.1); 
+            color: var(--color-accent); 
+        }
+        .kpi-card.deudas .kpi-icon { 
+            background-color: rgba(245, 158, 11, 0.1); 
+            color: var(--color-warning); 
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .trend-up { color: var(--color-success); }
+        .trend-down { color: var(--color-danger); }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .kpi-detail {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .kpi-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding-top: var(--space-sm);
+            border-top: 1px solid var(--color-border);
+            transition: all 0.2s;
+        }
+
+        .kpi-action:hover {
+            color: var(--color-text-primary);
+        }
+
+        .kpi-action i {
+            font-size: 0.75rem;
+            transition: transform 0.2s;
+        }
+
+        .kpi-action:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Widget de Actividad Reciente */
+        .activity-widget {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-xl);
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .widget-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .widget-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .widget-link:hover {
+            text-decoration: underline;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.success { background-color: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+        .activity-icon.warning { background-color: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+        .activity-icon.primary { background-color: rgba(59, 130, 246, 0.1); color: var(--color-primary); }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+            margin-bottom: 2px;
+        }
+
+        .activity-detail {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+        }
+
+        /* Columna derecha - Estadísticas y Acciones */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        /* Widget de Estadísticas */
+        .stats-widget {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-xl);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--space-md);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            background-color: #f9fafb;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Widget de Acciones Rápidas */
+        .actions-widget {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-xl);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-lg);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--color-text-primary);
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-primary);
+            background-color: #eff6ff;
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .action-btn:nth-child(1) .action-icon { background-color: rgba(59, 130, 246, 0.1); color: var(--color-primary); }
+        .action-btn:nth-child(2) .action-icon { background-color: rgba(139, 92, 246, 0.1); color: var(--color-accent); }
+        .action-btn:nth-child(3) .action-icon { background-color: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+        .action-btn:nth-child(4) .action-icon { background-color: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+
+        .action-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Sección inferior - Pagos Pendientes */
+        .pending-section {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+
+        .pending-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-lg);
+        }
+
+        .pending-table th {
+            text-align: left;
+            padding: var(--space-sm);
+            border-bottom: 2px solid var(--color-border);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .pending-table td {
+            padding: var(--space-sm);
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.95rem;
+        }
+
+        .pending-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .client-name {
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        .amount {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .due-date {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .due-soon { background-color: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+        .due-today { background-color: rgba(239, 68, 68, 0.1); color: var(--color-danger); }
+        .due-future { background-color: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+
+        .action-cell {
+            text-align: right;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-small:hover {
+            background-color: #2563eb;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .header, .main-content {
+                left: 0;
+                margin-left: 0;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid,
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-sm);
+            }
+            
+            .search-bar {
+                max-width: 100%;
+            }
+            
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR BLANCO -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">LL</div>
+            <div class="sidebar-logo-text">Lupe Laguna</div>
+        </div>
+        
+        <div class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div class="nav-text">Home</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <div class="nav-text">Solares</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-car"></i></div>
+                <div class="nav-text">Vehículos</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <div class="nav-text">Deudas Personales</div>
+                <div class="nav-badge">2</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-users"></i></div>
+                <div class="nav-text">Clientes</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="nav-text">Pagos</div>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="nav-text">Recibos</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="header-left">
+            <div class="page-title">
+                <h1>Dashboard</h1>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar cliente, solar, vehículo...">
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <button class="notification-btn">
+                <i class="far fa-bell"></i>
+                <div class="notification-dot"></div>
+            </button>
+            
+            <div class="user-profile">
+                <div class="user-avatar">LL</div>
+                <div class="user-info">
+                    <div class="user-name">Lupe Laguna</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content" id="mainContent">
+        <!-- Sección de bienvenida -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Bienvenido, Lupe</h1>
+            <p class="welcome-subtitle">Resumen completo de tu negocio • <span id="currentDate"></span></p>
+        </div>
+
+        <!-- Grid principal -->
+        <div class="dashboard-grid">
+            <!-- Columna izquierda -->
+            <div class="left-column">
+                <!-- KPIs -->
+                <div class="kpi-grid">
+                    <div class="kpi-card solares">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <div class="kpi-trend trend-up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-value">12</div>
+                        <div class="kpi-label">Solares Disponibles</div>
+                        <div class="kpi-detail">De 17 totales • 5 vendidos este mes</div>
+                        <a href="#" class="kpi-action">
+                            Ver inventario
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="kpi-card vehiculos">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="kpi-trend trend-up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-value">5</div>
+                        <div class="kpi-label">Vehículos Disponibles</div>
+                        <div class="kpi-detail">2 motos • 3 autos • 2 vendidos</div>
+                        <a href="#" class="kpi-action">
+                            Gestionar vehículos
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="kpi-card deudas">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                            <div class="kpi-trend trend-down">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>2 pendientes</span>
+                            </div>
+                        </div>
+                        <div class="kpi-value">$800</div>
+                        <div class="kpi-label">Deudas Personales</div>
+                        <div class="kpi-detail">Total por cobrar • 1 vence pronto</div>
+                        <a href="#" class="kpi-action">
+                            Ver y gestionar
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Actividad Reciente -->
+                <div class="activity-widget">
+                    <div class="widget-header">
+                        <h3 class="widget-title">Actividad Reciente</h3>
+                        <a href="#" class="widget-link">Ver todo</a>
+                    </div>
+                    
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Pago recibido</div>
+                                <div class="activity-detail">Juan Pérez pagó $700 por Solar Lote A-05</div>
+                            </div>
+                            <div class="activity-time">Hace 2 horas</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon primary">
+                                <i class="fas fa-map-pin"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Solar reservado</div>
+                                <div class="activity-detail">María Gómez reservó el Lote B-02</div>
+                            </div>
+                            <div class="activity-time">Ayer, 15:30</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Recordatorio de pago</div>
+                                <div class="activity-detail">Carlos Ruiz tiene un pago pendiente de $400</div>
+                            </div>
+                            <div class="activity-time">Ayer, 10:15</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="right-column">
+                <!-- Estadísticas -->
+                <div class="stats-widget">
+                    <div class="widget-header">
+                        <h3 class="widget-title">Estadísticas del Mes</h3>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">$12,850</div>
+                            <div class="stat-label">Ingresos Totales</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Ventas Realizadas</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Clientes Nuevos</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label">Tasa de Éxito</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones Rápidas -->
+                <div class="actions-widget">
+                    <div class="widget-header">
+                        <h3 class="widget-title">Acciones Rápidas</h3>
+                    </div>
+                    
+                    <div class="actions-grid">
+                        <a href="#" class="action-btn" id="newSolar">
+                            <div class="action-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="action-label">Nuevo Solar</div>
+                        </a>
+                        
+                        <a href="#" class="action-btn" id="newVehicle">
+                            <div class="action-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="action-label">Agregar Vehículo</div>
+                        </a>
+                        
+                        <a href="#" class="action-btn" id="newReceipt">
+                            <div class="action-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="action-label">Generar Recibo</div>
+                        </a>
+                        
+                        <a href="#" class="action-btn" id="newClient">
+                            <div class="action-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="action-label">Nuevo Cliente</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagos Pendientes -->
+        <div class="pending-section">
+            <div class="widget-header">
+                <h3 class="widget-title">Pagos Pendientes</h3>
+                <a href="#" class="widget-link">Ver todos</a>
+            </div>
+            
+            <table class="pending-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Concepto</th>
+                        <th>Monto</th>
+                        <th>Vencimiento</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="client-name">Carlos Ruiz</td>
+                        <td>Deuda personal</td>
+                        <td class="amount">$400</td>
+                        <td>
+                            <span class="due-date due-today">Hoy</span>
+                        </td>
+                        <td class="action-cell">
+                            <button class="btn-small">Cobrar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="client-name">Ana Martínez</td>
+                        <td>Cuota Solar B-03</td>
+                        <td class="amount">$300</td>
+                        <td>
+                            <span class="due-date due-soon">Mañana</span>
+                        </td>
+                        <td class="action-cell">
+                            <button class="btn-small">Recordar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="client-name">Luis González</td>
+                        <td>Moto Honda 2021</td>
+                        <td class="amount">$500</td>
+                        <td>
+                            <span class="due-date due-future">15 Jun</span>
+                        </td>
+                        <td class="action-cell">
+                            <button class="btn-small">Ver detalle</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar fecha actual
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('es-ES', options);
+            
+            // Navegación en sidebar
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const sectionName = this.querySelector('.nav-text').textContent;
+                    document.querySelector('.page-title h1').textContent = sectionName;
+                });
+            });
+            
+            // Acciones rápidas
+            document.getElementById('newSolar').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Abriendo formulario para agregar nuevo solar...');
+            });
+            
+            document.getElementById('newVehicle').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Abriendo formulario para agregar nuevo vehículo...');
+            });
+            
+            document.getElementById('newReceipt').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Generando nuevo recibo...');
+            });
+            
+            document.getElementById('newClient').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Abriendo formulario para nuevo cliente...');
+            });
+            
+            // Botones de acción en tabla
+            document.querySelectorAll('.btn-small').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const client = row.querySelector('.client-name').textContent;
+                    const amount = row.querySelector('.amount').textContent;
+                    
+                    if (this.textContent === 'Cobrar') {
+                        alert(`Marcando pago de ${amount} de ${client} como cobrado...`);
+                    } else if (this.textContent === 'Recordar') {
+                        alert(`Enviando recordatorio a ${client}...`);
+                    }
+                });
+            });
+            
+            // Barra de búsqueda
+            const searchInput = document.querySelector('.search-bar input');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    alert(`Buscando: "${this.value}"`);
+                    this.value = '';
+                }
+            });
+            
+            // Notificaciones
+            document.querySelector('.notification-btn').addEventListener('click', function() {
+                alert('Tienes 3 notificaciones:\n1. Pago pendiente vence hoy\n2. Nuevo mensaje de cliente\n3. Sistema actualizado');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - Lupe Laguna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #f9fafb; --color-card: #ffffff; --color-text-primary: #111827;
+            --color-text-secondary: #4b5563; --color-text-muted: #9ca3af; --color-border: #e5e7eb;
+            --color-primary: #3b82f6; --color-accent: #8b5cf6; --color-success: #10b981;
+            --space-sm: 0.75rem; --space-md: 1rem; --space-lg: 1.5rem; --space-xl: 2rem;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text-primary); display: flex; min-height: 100vh; }
+        
+        .sidebar { width: 240px; background: white; border-right: 1px solid var(--color-border); position: fixed; top: 0; bottom: 0; }
+        .header { height: 64px; background: white; border-bottom: 1px solid var(--color-border); padding: 0 var(--space-xl); display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; right: 0; left: 240px; }
+        .main-content { flex: 1; margin-left: 240px; margin-top: 64px; padding: var(--space-xl); }
+        
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xl); }
+        .page-header h1 { font-size: 1.75rem; font-weight: 600; }
+        
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); margin-bottom: var(--space-xl); }
+        .stat-card { background: white; border: 1px solid var(--color-border); border-radius: 10px; padding: var(--space-lg); text-align: center; }
+        .stat-number { font-size: 1.75rem; font-weight: 700; }
+        .stat-label { font-size: 0.9rem; color: var(--color-text-muted); }
+        
+        .search-bar { background: white; border: 1px solid var(--color-border); border-radius: 12px; padding: var(--space-lg); margin-bottom: var(--space-xl); display: flex; gap: var(--space-lg); align-items: center; }
+        .search-bar input { flex: 1; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px; }
+        
+        .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-lg); }
+        .client-card { background: white; border: 1px solid var(--color-border); border-radius: 12px; padding: var(--space-lg); transition: all 0.2s; }
+        .client-card:hover { border-color: var(--color-primary); }
+        .client-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md); }
+        .client-avatar { width: 50px; height: 50px; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.2rem; }
+        .client-info { flex: 1; }
+        .client-name { font-weight: 600; font-size: 1.1rem; }
+        .client-phone { font-size: 0.9rem; color: var(--color-text-muted); }
+        
+        .client-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); margin: var(--space-md) 0; padding: var(--space-md); background: #f9fafb; border-radius: 8px; }
+        .stat-small { text-align: center; }
+        .stat-value { font-weight: 600; color: var(--color-text-primary); }
+        .stat-label-small { font-size: 0.8rem; color: var(--color-text-muted); }
+        
+        .client-actions { display: flex; gap: var(--space-sm); }
+        .action-btn { flex: 1; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px; background: white; cursor: pointer; font-size: 0.9rem; }
+        .action-btn.primary { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+        
+        .btn-primary { padding: var(--space-sm) var(--space-lg); background: var(--color-primary); color: white; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div style="padding: var(--space-xl) var(--space-lg); border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: var(--space-md);">
+            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">LL</div>
+            <div style="font-size: 1.25rem; font-weight: 600;">Lupe Laguna</div>
+        </div>
+        <div style="padding: var(--space-lg) 0;">
+            <a href="dashboard.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-home"></i> Home</a>
+            <a href="solares.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-map-marked-alt"></i> Solares</a>
+            <a href="vehiculos.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-car"></i> Vehículos</a>
+            <a href="deudas.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-hand-holding-usd"></i> Deudas Personales</a>
+            <a href="clientes.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-primary); background: #eff6ff; border-left: 3px solid var(--color-primary); text-decoration: none;"><i class="fas fa-users"></i> Clientes</a>
+            <a href="pagos.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-money-bill-wave"></i> Pagos</a>
+            <a href="recibos.html" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); color: var(--color-text-secondary); text-decoration: none;"><i class="fas fa-file-invoice-dollar"></i> Recibos</a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div style="display: flex; align-items: center; gap: var(--space-xl); flex: 1;">
+            <div><h1 style="font-size: 1.25rem; font-weight: 600;">Clientes</h1></div>
+        </div>
+        <button class="btn-primary"><i class="fas fa-user-plus"></i> Nuevo Cliente</button>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1>Gestor de Clientes</h1>
+                <p style="color: var(--color-text-muted); margin-top: 4px;">Todos los clientes registrados en el sistema</p>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card"><div class="stat-number">24</div><div class="stat-label">Clientes Totales</div></div>
+            <div class="stat-card"><div class="stat-number">7</div><div class="stat-label">Compraron Solar</div></div>
+            <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">Compraron Vehículo</div></div>
+            <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">Con Deuda Activa</div></div>
+        </div>
+
+        <div class="search-bar">
+            <i class="fas fa-search" style="color: var(--color-text-muted);"></i>
+            <input type="text" placeholder="Buscar cliente por nombre, teléfono o email...">
+            <select style="padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: 6px;">
+                <option>Todos los clientes</option>
+                <option>Con compras recientes</option>
+                <option>Con deudas pendientes</option>
+            </select>
+        </div>
+
+        <div class="clients-grid">
+            <!-- Cliente 1 -->
+            <div class="client-card">
+                <div class="client-header">
+                    <div class="client-avatar">MG</div>
+                    <div class="client-info">
+                        <div class="client-name">María Gómez</div>
+                        <div class="client-phone">+52 331 123 4567</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+                    <i class="fas fa-envelope" style="margin-right: 6px;"></i>maria.gomez@email.com<br>
+                    <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>Guadalajara, Jal.
+                </div>
+                <div class="client-stats">
+                    <div class="stat-small">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label-small">Solar</div>
+                    </div>
+                    <div class="stat-small">
+                        <div class="stat-value">$18,500</div>
+                        <div class="stat-label-small">Total Comprado</div>
+                    </div>
+                </div>
+                <div class="client-actions">
+                    <button class="action-btn">Ver</button>
+                    <button class="action-btn primary">Editar</button>
+                </div>
+            </div>
+
+            <!-- Cliente 2 -->
+            <div class="client-card">
+                <div class="client-header">
+                    <div class="client-avatar">JP</div>
+                    <div class="client-info">
+                        <div class="client-name">Juan Pérez</div>
+                        <div class="client-phone">+52 333 987 6543</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+                    <i class="fas fa-envelope" style="margin-right: 6px;"></i>juan.perez@email.com<br>
+                    <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>Tlaquepaque, Jal.
+                </div>
+                <div class="client-stats">
+                    <div class="stat-small">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label-small">Compras</div>
+                    </div>
+                    <div class="stat-small">
+                        <div class="stat-value">$24,200</div>
+                        <div class="stat-label-small">Total Comprado</div>
+                    </div>
+                </div>
+                <div class="client-actions">
+                    <button class="action-btn">Ver</button>
+                    <button class="action-btn primary">Editar</button>
+                </div>
+            </div>
+
+            <!-- Cliente 3 -->
+            <div class="client-card">
+                <div class="client-header">
+                    <div class="client-avatar">CR</div>
+                    <div class="client-info">
+                        <div class="client-name">Carlos Ruiz</div>
+                        <div class="client-phone">+52 332 555 1212</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+                    <i class="fas fa-envelope" style="margin-right: 6px;"></i>carlos.ruiz@email.com<br>
+                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; margin-right: 6px;"></i>Deuda pendiente
+                </div>
+                <div class="client-stats">
+                    <div class="stat-small">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label-small">Vehículo</div>
+                    </div>
+                    <div class="stat-small">
+                        <div class="stat-value">$400</div>
+                        <div class="stat-label-small">Por pagar</div>
+                    </div>
+                </div>
+                <div class="client-actions">
+                    <button class="action-btn">Ver</button>
+                    <button class="action-btn primary">Cobrar</button>
+                </div>
+            </div>
+
+            <!-- Cliente 4 -->
+            <div class="client-card">
+                <div class="client-header">
+                    <div class="client-avatar">LG</div>
+                    <div class="client-info">
+                        <div class="client-name">Luisa González</div>
+                        <div class="client-phone">+52 334 777 8888</div>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+                    <i class="fas fa-envelope" style="margin-right: 6px;"></i>luisa.g@email.com<br>
+                    <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>Zapopan, Jal.
+                </div>
+                <div class="client-stats">
+                    <div class="stat-small">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label-small">Solar</div>
+                    </div>
+                    <div class="stat-small">
+                        <div class="stat-value">$15,000</div>
+                        <div class="stat-label-small">Total Comprado</div>
+                    </div>
+                </div>
+                <div class="client-actions">
+                    <button class="action-btn">Ver</button>
+                    <button class="action-btn primary">Editar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            alert('Nuevo cliente:\n\nFormulario para registrar:\n- Nombre completo\n- Teléfono\n- Email\n- Dirección\n- Notas adicionales');
+        });
+        
+        document.querySelectorAll('.client-actions .action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const clientName = this.closest('.client-card').querySelector('.client-name').textContent;
+                if(this.textContent === 'Ver') {
+                    alert(`Ver detalles de: ${clientName}\n\nHistorial completo:\n- Compras realizadas\n- Pagos\n- Contratos\n- Contactos`);
+                } else if(this.textContent === 'Editar') {
+                    alert(`Editar cliente: ${clientName}\n\nModificar datos de contacto, dirección, etc.`);
+                } else if(this.textContent === 'Cobrar') {
+                    alert(`Registrar cobro para: ${clientName}\n\nFormulario para registrar pago de deuda.`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
